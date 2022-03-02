@@ -1,0 +1,77 @@
+.filter-dropdown {
+  margin-bottom: 46px;
+  .btn-primary {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    background: none;
+    color: #78849e;
+    border: #78849e66 1px solid;
+    border-radius: 20px;
+  }
+  .btn-primary:hover {
+    font-weight: 500;
+    color: #012433;
+    background: #00baff;
+    box-shadow: none;
+  }
+  .btn-primary:active {
+    font-weight: 500;
+    color: #012433;
+    background: #00baff;
+    box-shadow: none;
+  }
+  .btn-primary.active {
+    font-weight: 500;
+    color: #012433;
+    background: #00baff;
+    box-shadow: none;
+    border: #78849e66 1px solid;
+  }
+  .btn-primary:focus {
+    box-shadow: none;
+  }
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
+.show.filter-dropdown {
+  .btn-primary.dropdown-toggle {
+    font-weight: 500;
+    color: #012433;
+    background: #00baff;
+    border: #78849e66 1px solid;
+    box-shadow: none;
+  }
+}
+
+.dropdown-menu {
+  .dropdown-title {
+    font-size: 12px;
+    font-weight: 400;
+    display: block;
+    text-align: center;
+    color: #78849eb9;
+    padding-top: 16px;
+  }
+  .dropdown-item {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #536b7a;
+    margin-bottom: 8px;
+    &.active {
+      font-weight: 500;
+      color: #012433;
+      background: #00baff;
+    }
+    &:active {
+      font-weight: 500;
+      color: #012433;
+      background: #00baff;
+    }
+  }
+  a:nth-child(2) {
+    margin-top: 18px;
+  }
+}
