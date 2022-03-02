@@ -34,12 +34,13 @@ const years = [
 
 function App() {
     const [results, setResults] = useState<any>(null); //* TODO Define
+    const [content, setContent] = useState<any>(null); //* TODO Define
 
     const [loading, setLoading] = useState<boolean>(true);
     const [apiError, setApiError] = useState<boolean>(false);
 
-    const [page, setPage] = useState<number>(0); //eslint-disable-line
-    const [size, setSize] = useState<number>(10);
+    const [page, setPage] = useState<number>(0);
+    const [size, setSize] = useState<number>(10); //eslint-disable-line
 
     const [year, setYear] = useState<string | null>(null);
 
@@ -58,8 +59,9 @@ function App() {
             .then((results) => {
                 setTimeout(() => {
                     setResults(results);
+                    setContent((content: any) => content ? [...content, ...results.content] : results.content);
                     setLoading(false);
-                }, 200); //* MINI LOADING EFFECT
+                }, 150); //* MINI LOADING EFFECT
             }).catch((errors) => {
                 console.log(errors);
                 setLoading(false);
@@ -91,20 +93,20 @@ function App() {
                                     className="filter-button"
                                     onClick={() => {
                                         setYear(null)
-                                        setSize(10)
+                                        setPage(0)
                                     }}
                                 >
                                     Top 10 Revenue
                                 </Button>
                             </div>
-                            <DropdownSelect label="Top 10 Revenue per Year" actions={years} year={year} setYear={setYear} setSize={setSize} />
+                            <DropdownSelect label="Top 10 Revenue per Year" actions={years} year={year} setYear={setYear} setPage={setPage} />
                             {year && (
                                 <div
                                     style={{ marginLeft: 10, marginTop: 2.5 }}
                                     className="svg-btn"
                                     onClick={() => {
                                         setYear(null)
-                                        setSize(10)
+                                        setPage(0)
                                     }}
                                 >
                                     <img src={reload} alt="reload" />
@@ -116,11 +118,13 @@ function App() {
                 <div className="row">
                     <div className="col-12">
                         <InfiniteScroll
-                            dataLength={results && results.content.length}
+                            dataLength={content && content.length}
                             next={() => {
-                                setSize(size + 10)
+                                if (content && results && content.length < results.totalElements) {
+                                    setPage(page + 1)
+                                }
                             }}
-                            hasMore={size < 1000}
+                            hasMore={content && results && content.length < results.totalElements}
                             height={600}
                             loader={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((el: number) => (
                                 <Table key={el} style={{ marginBottom: 0 }}>
@@ -149,12 +153,14 @@ function App() {
                                                 <td className="table-row-skeleton"></td>
                                             </tr>
                                         ))
-                                    ) : !loading && !apiError ? (
-                                        results.content.map((movie: Movie) => (
+                                    ) : !loading && !apiError && results.content.length > 0 ? (
+                                        content.map((movie: Movie) => (
                                             <TableRow key={movie.id} movie={movie} fetchMovie={fetchMovie} />
                                         ))
+                                    ) : !loading && !apiError && results.content.length === 0 ? (
+                                        <h1 style={{ position: 'absolute', top: "50%", right: "40%" }}>No results were found</h1>
                                     ) : apiError && (
-                                        <h1>API ERROR</h1>
+                                        <h1 style={{ position: 'absolute', top: "50%", right: "40%" }}>API ERROR</h1>
                                     )}
                                 </tbody>
                             </Table>

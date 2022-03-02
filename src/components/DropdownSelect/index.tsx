@@ -7,10 +7,10 @@ type DropdownSelectProps = {
     year: string | null,
     actions: Array<string>,
     setYear(year: string): any;
-    setSize(size: number): any;
+    setPage(page: number): any;
 }
 
-const DropdownSelect: FunctionComponent<DropdownSelectProps> = ({ label, actions, year, setYear, setSize }) => {
+const DropdownSelect: FunctionComponent<DropdownSelectProps> = ({ label, actions, year, setYear, setPage }) => {
     // const [open, setOpen] = useState<boolean>(false);
 
     return (
@@ -28,7 +28,7 @@ const DropdownSelect: FunctionComponent<DropdownSelectProps> = ({ label, actions
                                 active={year === el}
                                 onClick={() => {
                                     setYear(el);
-                                    setSize(10);
+                                    setPage(0);
                                 }}
                             >
                                 {el}
