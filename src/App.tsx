@@ -34,7 +34,7 @@ const years = [
 
 function App() {
     const [results, setResults] = useState<any>(null); //* TODO Define
-    const [content, setContent] = useState<any>(null); //* TODO Define
+    const [content, setContent] = useState<any>([]); //* TODO Define
 
     const [loading, setLoading] = useState<boolean>(true);
     const [apiError, setApiError] = useState<boolean>(false);
@@ -47,19 +47,25 @@ function App() {
     const [selectedMovie, selectMovie] = useState<MovieDetail | null>(null);
 
     useEffect(() => {
+        if (content.length === 0) {
+            // RESET SCROLLBAR ON COMPONENT
+            const myComponent: any = document.getElementsByClassName('infinite-scroll-component');
+            myComponent[0].scrollTop = 0;
+        }
+
         //! IF LINK HAS MOVIE ID OPEN MOVIE PROFILE
         const url_string = (window.location.href).toLowerCase();
         let url = new URL(url_string);
         let movieId = url.searchParams.get("movieid");
         if (movieId) {
-            fetchMovie(movieId)
+            fetchMovie(movieId);
         }
 
         getWithFilters({ pagination: { page, size }, filters: { start: year, end: year } })
             .then((results) => {
                 setTimeout(() => {
                     setResults(results);
-                    setContent((content: any) => content ? [...content, ...results.content] : results.content);
+                    setContent((content: any) => [...content, ...results.content]);
                     setLoading(false);
                 }, 150); //* MINI LOADING EFFECT
             }).catch((errors) => {
@@ -67,7 +73,7 @@ function App() {
                 setLoading(false);
                 setApiError(true);
             });
-    }, [page, size, year]);
+    }, [page, size, year]); // eslint-disable-line
 
     const fetchMovie = (movieId: string) => {
         axios.get(`https://movie-challenge-api-xpand.azurewebsites.net/api/movies/${movieId}`)
@@ -75,7 +81,7 @@ function App() {
                 window.history.pushState(null, "", `${window.location.pathname}?movieid=${movieId}`);
                 selectMovie(results.data);
             }).catch((errors) => {
-                console.log(errors)
+                console.log(errors);
             });
     }
 
@@ -92,21 +98,23 @@ function App() {
                                     active={year === null}
                                     className="filter-button"
                                     onClick={() => {
-                                        setYear(null)
-                                        setPage(0)
+                                        setYear(null);
+                                        setPage(0);
+                                        setContent([]);
                                     }}
                                 >
                                     Top 10 Revenue
                                 </Button>
                             </div>
-                            <DropdownSelect label="Top 10 Revenue per Year" actions={years} year={year} setYear={setYear} setPage={setPage} />
+                            <DropdownSelect label="Top 10 Revenue per Year" actions={years} year={year} setYear={setYear} setPage={setPage} setContent={setContent} />
                             {year && (
                                 <div
                                     style={{ marginLeft: 10, marginTop: 2.5 }}
                                     className="svg-btn"
                                     onClick={() => {
-                                        setYear(null)
-                                        setPage(0)
+                                        setYear(null);
+                                        setPage(0);
+                                        setContent([]);
                                     }}
                                 >
                                     <img src={reload} alt="reload" />
@@ -121,7 +129,7 @@ function App() {
                             dataLength={content && content.length}
                             next={() => {
                                 if (content && results && content.length < results.totalElements) {
-                                    setPage(page + 1)
+                                    setPage(page + 1);
                                 }
                             }}
                             hasMore={content && results && content.length < results.totalElements}
