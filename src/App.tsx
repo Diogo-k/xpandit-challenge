@@ -68,7 +68,7 @@ function App() {
     }, [page, size, year]);
 
     const fetchMovie = (movieId: string) => {
-        axios.get(`http://movie-challenge-api-xpand.azurewebsites.net/api/movies/${movieId}`)
+        axios.get(`https://movie-challenge-api-xpand.azurewebsites.net/api/movies/${movieId}`)
             .then((results) => {
                 window.history.pushState(null, "", `${window.location.pathname}?movieid=${movieId}`);
                 selectMovie(results.data);
@@ -139,7 +139,7 @@ function App() {
                             <Table style={{ marginBottom: 0 }}>
                                 <TableHead columns={["RANKING", "TITLE", "YEAR", "REVENUE", ""]} />
                                 <tbody style={{ height: 600 }}>
-                                    {loading ? (
+                                    {loading && !apiError ? (
                                         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((el: number) => (
                                             <tr key={el} className="skeleton">
                                                 <td className="table-row-skeleton"></td>
@@ -153,7 +153,7 @@ function App() {
                                         results.content.map((movie: Movie) => (
                                             <TableRow key={movie.id} movie={movie} fetchMovie={fetchMovie} />
                                         ))
-                                    ) : (
+                                    ) : apiError && (
                                         <h1>API ERROR</h1>
                                     )}
                                 </tbody>

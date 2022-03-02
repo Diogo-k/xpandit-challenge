@@ -35,7 +35,7 @@ export const getWithFilters = ({ pagination, filters }: Options) => {
 
   return axios
     .get(
-      `http://movie-challenge-api-xpand.azurewebsites.net/api/movies${filterString}`
+      `https://movie-challenge-api-xpand.azurewebsites.net/api/movies${filterString}`
     )
     .then((res) => res.data);
 };
