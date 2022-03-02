@@ -47,7 +47,7 @@ Also, be sure to have `git` available in your PATH, `npm` might need it.
 
 ## Install
 
-    $ git clone https://github.com/ORG/xpandit-challenge.git
+    $ git clone https://github.com/Diogo-k/xpandit-challenge.git
     $ cd xpandit-challenge
     $ npm install
 
